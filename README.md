@@ -1,19 +1,24 @@
 # Reference Studio
 
-Reference Studio is a free citation workspace that runs entirely in a web browser. It imports, creates, organizes, and copies APA 7 and UNSW Harvard references without an account, installation, build step, or server.
+Reference Studio is a free citation workspace that runs entirely in a web browser. It imports, creates, organizes, and copies APA 7 and UNSW Harvard references without an account, installation, build step, or citation-data upload.
 
-Created by [FatfreeJoy](https://github.com/FatfreeJoy). Report a problem or suggest an improvement through [GitHub Issues](https://github.com/FatfreeJoy/Free-Local-Citation-Generator/issues/new/choose).
+**[Open Reference Studio →](https://fatfreejoy.github.io/Reference-Studio/)**
+
+Created by [FatfreeJoy](https://github.com/FatfreeJoy) · [Report a bug or suggest an improvement](https://github.com/FatfreeJoy/Reference-Studio/issues/new/choose)
 
 ![Reference Studio workspace showing projects, source entry, and formatted references](assets/reference-studio-preview.png)
 
-## Start
+## Use Reference Studio
+
+### Open it online
+
+Launch the [GitHub Pages version](https://fatfreejoy.github.io/Reference-Studio/) and choose **Start** on the welcome screen.
+
+### Run it locally
 
 1. Download or clone this repository.
 2. Open `index.html` in a current browser.
 3. Choose **Start** on the welcome screen.
-4. Import, paste, or enter a source.
-
-The application also works as a static GitHub Pages site.
 
 ## Features
 
@@ -42,7 +47,7 @@ The form supports journal articles, webpages, books, and book chapters. Use **La
 
 ### Paste reference
 
-Paste completed references separated by blank lines. These entries remain plain text and do not change when the list’s citation style changes.
+Paste completed references separated by blank lines. These entries remain plain text and do not change when the list's citation style changes.
 
 ## Data and backups
 
@@ -83,3 +88,7 @@ Key files:
 - `samples/` — small BibTeX and RIS examples
 - `tests/` — dependency-free Node tests
 - `.github/ISSUE_TEMPLATE/` — feedback forms
+
+## License
+
+Reference Studio is available under the [MIT License](LICENSE).
