@@ -1,0 +1,24 @@
+name: Improvement suggestion
+description: Suggest a feature or usability improvement
+title: "[Suggestion]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the difficulty or unmet need before proposing a solution.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Proposed improvement
+      description: Describe how you think the tool could address the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives or examples
+      description: Mention other approaches, tools, screenshots, or examples that may help.

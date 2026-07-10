@@ -1,0 +1,55 @@
+name: Bug report
+description: Report something that is not working correctly
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve Reference Studio. Remove private or sensitive citation data before posting.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe what you expected and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. See...
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Firefox 128, Chrome 126, Safari 18, etc.
+    validations:
+      required: true
+  - type: dropdown
+    id: access
+    attributes:
+      label: How did you open the tool?
+      options:
+        - Downloaded copy opened from index.html
+        - GitHub Pages
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Minimal non-private example
+      description: For citation problems, paste the smallest BibTeX/RIS or manual-entry example that demonstrates the issue.
+      render: text
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I removed private, personal, or unpublished information from this report.
+          required: true
