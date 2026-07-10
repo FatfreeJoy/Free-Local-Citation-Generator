@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A private browser workspace for building and organizing citation lists." />
+    <meta name="theme-color" content="#fff1e6" />
+    <title>Reference Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to workspace</a>
+
+    <main id="workspace" class="workspace">
+      <nav class="project-rail" aria-label="Projects and reference lists">
+        <div class="rail-heading">
+          <div>
+            <p class="eyebrow">Workspace</p>
+            <h1>Projects</h1>
+          </div>
+          <button id="new-project-button" class="icon-button filled" type="button" aria-label="Create project">+</button>
+        </div>
+        <div id="project-tree" class="project-tree"></div>
+        <div class="rail-footer">
+          <p class="storage-note"><span aria-hidden="true"></span> Saved on this device</p>
+          <button id="about-button" class="info-button" type="button"><span aria-hidden="true">ⓘ</span> Info</button>
+        </div>
+      </nav>
+
+      <section class="source-panel" aria-labelledby="source-heading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Add material</p>
+            <h2 id="source-heading">Source entry</h2>
+          </div>
+          <span class="panel-hint">Adds to the active list</span>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Input method">
+          <button id="import-tab" class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="import-panel" tabindex="0">Import</button>
+          <button id="manual-tab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="manual-panel" tabindex="-1">Manual entry</button>
+          <button id="paste-tab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="paste-panel" tabindex="-1">Paste reference</button>
+        </div>
+
+        <div id="import-panel" class="tab-panel" role="tabpanel" aria-labelledby="import-tab">
+          <div id="drop-zone" class="drop-zone">
+            <input id="file-input" class="visually-hidden" type="file" multiple />
+            <div>
+              <p class="drop-title">Drop reference-data files</p>
+              <p class="muted">BibTeX or RIS content in .bib, .ris, .txt, or other text files</p>
+            </div>
+            <label class="text-button" for="file-input">Choose files</label>
+          </div>
+
+          <div class="label-row">
+            <label class="field-label" for="source-data">Citation data</label>
+            <button id="clear-data-button" class="quiet-button" type="button">Clear data</button>
+          </div>
+          <textarea id="source-data" rows="8" spellcheck="false" placeholder="Paste BibTeX or RIS data here"></textarea>
+          <div class="input-meta">
+            <span id="format-status">Waiting for BibTeX or RIS</span>
+            <button id="sample-button" class="quiet-button" type="button">Use example</button>
+          </div>
+          <div id="import-message" class="form-message" role="alert"></div>
+          <button id="parse-button" class="primary-button" type="button">
+            <span>Add imported references</span><span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div id="paste-panel" class="tab-panel" role="tabpanel" aria-labelledby="paste-tab" hidden>
+          <div class="paste-intro">
+            <p class="drop-title">Already have a finished reference?</p>
+            <p class="muted">Paste the citation text as written. Separate multiple references with a blank line. Pasted entries stay plain text and are not restyled.</p>
+          </div>
+          <div class="label-row">
+            <label class="field-label" for="formatted-data">Formatted reference</label>
+            <button id="clear-formatted-button" class="quiet-button" type="button">Clear</button>
+          </div>
+          <textarea id="formatted-data" rows="9" spellcheck="true" placeholder="Paste one or more completed references here"></textarea>
+          <div id="paste-message" class="form-message" role="alert"></div>
+          <button id="add-formatted-button" class="primary-button" type="button">
+            <span>Add as written</span><span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div id="manual-panel" class="tab-panel" role="tabpanel" aria-labelledby="manual-tab" hidden>
+          <form id="manual-form">
+            <div class="field full-field">
+              <label for="reference-type">Reference type</label>
+              <select id="reference-type" name="type">
+                <option value="article">Journal article</option>
+                <option value="web">Web page</option>
+                <option value="book">Book</option>
+                <option value="chapter">Book chapter</option>
+              </select>
+            </div>
+
+            <fieldset class="authors-field full-field">
+              <legend>Authors</legend>
+              <div id="author-rows" class="author-rows"></div>
+              <button id="add-author-button" class="add-line-button" type="button">+ Add another author</button>
+              <small>Enter names separately. For an organization author, leave First name blank and use Last name for the full organization.</small>
+            </fieldset>
+
+            <div class="field compact-field">
+              <label for="year">Year</label>
+              <input id="year" name="year" inputmode="numeric" maxlength="4" placeholder="2024" />
+            </div>
+            <div class="field compact-field" data-types="web" hidden>
+              <label for="month">Month</label>
+              <input id="month" name="month" placeholder="March" />
+            </div>
+            <div class="field compact-field" data-types="web" hidden>
+              <label for="day">Day</label>
+              <input id="day" name="day" inputmode="numeric" maxlength="2" placeholder="14" />
+            </div>
+            <div class="field title-field">
+              <label id="title-label" for="title">Article title <span aria-hidden="true">*</span></label>
+              <input id="title" name="title" required placeholder="Title of the work" />
+            </div>
+            <div class="field full-field" data-types="article web chapter">
+              <label id="container-label" for="journal">Journal <span aria-hidden="true">*</span></label>
+              <input id="journal" name="journal" placeholder="Journal of Thoughtful Research" />
+            </div>
+            <div class="field" data-types="article">
+              <label for="volume">Volume</label>
+              <input id="volume" name="volume" placeholder="18" />
+            </div>
+            <div class="field" data-types="article">
+              <label for="issue">Issue</label>
+              <input id="issue" name="issue" placeholder="2" />
+            </div>
+            <div class="field" data-types="article chapter">
+              <label for="pages">Pages</label>
+              <input id="pages" name="pages" placeholder="114–129" />
+            </div>
+            <div class="field" data-types="book chapter" hidden>
+              <label for="edition">Edition</label>
+              <input id="edition" name="edition" placeholder="2" />
+            </div>
+
+            <fieldset id="editors-field" class="authors-field full-field" data-types="chapter" hidden>
+              <legend>Book editors</legend>
+              <div id="editor-rows" class="author-rows"></div>
+              <button id="add-editor-button" class="add-line-button" type="button">+ Add another editor</button>
+            </fieldset>
+
+            <div class="field full-field" data-types="book chapter" hidden>
+              <label for="publisher">Publisher <span aria-hidden="true">*</span></label>
+              <input id="publisher" name="publisher" placeholder="Publisher name" />
+            </div>
+            <div class="field full-field" data-types="book chapter" data-styles="harvard" hidden>
+              <label for="place">Place of publication</label>
+              <input id="place" name="place" placeholder="Sydney" />
+            </div>
+            <div class="field full-field" data-types="article web" data-styles="harvard" hidden>
+              <label for="accessed">Accessed date</label>
+              <input id="accessed" name="accessed" placeholder="20 February 2026" />
+            </div>
+            <div class="field full-field">
+              <label for="doi-url">DOI or URL</label>
+              <input id="doi-url" name="doiUrl" inputmode="url" placeholder="https://doi.org/10.1000/example" />
+            </div>
+            <div id="manual-message" class="form-message full-field" role="alert"></div>
+            <button class="primary-button full-field" type="submit"><span>Add reference</span><span aria-hidden="true">→</span></button>
+          </form>
+        </div>
+      </section>
+
+      <section class="output-panel" aria-labelledby="output-heading">
+        <div class="panel-heading output-heading">
+          <div>
+            <p id="active-project-label" class="eyebrow">My first project</p>
+            <h2 id="output-heading"><span id="active-list-name">References</span></h2>
+          </div>
+          <div class="output-style-control">
+            <div class="style-control-row">
+              <label for="citation-style">Citation style</label>
+              <select id="citation-style">
+                <option value="apa7">APA 7th edition</option>
+                <option value="harvard">Harvard — UNSW</option>
+              </select>
+            </div>
+            <a id="style-guide-link" class="official-link" href="https://apastyle.apa.org/" target="_blank" rel="noopener noreferrer">Official APA Style guide ↗</a>
+          </div>
+        </div>
+
+        <div class="output-actions">
+          <p><span id="reference-count" class="count">0 entries</span> · Alphabetized</p>
+          <div>
+            <button id="rename-list-button" class="quiet-button" type="button">Rename</button>
+            <button id="delete-list-button" class="quiet-button danger-link" type="button">Delete list</button>
+            <button id="clear-list-button" class="quiet-button" type="button" disabled>Clear list</button>
+            <button id="copy-all-button" class="text-button" type="button" disabled>Copy all</button>
+          </div>
+        </div>
+
+        <div id="empty-state" class="empty-state">
+          <span class="empty-glyph" aria-hidden="true">¶</span>
+          <p>This reference list is empty.</p>
+          <small>Import a file or add a source manually. New references accumulate here.</small>
+        </div>
+        <ol id="citation-list" class="citation-list" aria-live="polite"></ol>
+        <p id="copy-status" class="visually-hidden" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <dialog id="welcome-dialog" class="welcome-dialog" aria-labelledby="welcome-title">
+      <button id="welcome-close-button" class="dialog-close" type="button" aria-label="Close introduction">×</button>
+      <p class="eyebrow">Reference Studio</p>
+      <h2 id="welcome-title">References,<br />organized.</h2>
+      <p>Import, paste, or enter sources. Drag lists between projects, then copy reference and in-text citations in APA 7 or UNSW Harvard.</p>
+      <div class="welcome-signoff">
+        <div>
+          <a class="creator-link" href="https://github.com/FatfreeJoy" target="_blank" rel="noopener noreferrer">FatfreeJoy ↗</a>
+          <small>Created by FatfreeJoy. Use this link to report a bug or share feedback.</small>
+        </div>
+        <button id="enter-button" class="primary-button" type="button"><span>Start</span><span aria-hidden="true">→</span></button>
+      </div>
+    </dialog>
+
+    <dialog id="organize-dialog" class="compact-dialog organize-dialog" aria-labelledby="organize-title">
+      <button id="organize-close-button" class="dialog-close" type="button" aria-label="Close organization controls">×</button>
+      <p class="eyebrow">Organize workspace</p>
+      <h2 id="organize-title">Organize</h2>
+      <p id="organize-context" class="organize-context"></p>
+
+      <section class="organize-section" aria-labelledby="order-heading">
+        <h3 id="order-heading">Order</h3>
+        <div class="reorder-buttons">
+          <button id="move-earlier-button" class="quiet-action-button" type="button">Move up</button>
+          <button id="move-later-button" class="quiet-action-button" type="button">Move down</button>
+        </div>
+      </section>
+
+      <section id="list-transfer-section" class="organize-section" aria-labelledby="transfer-heading" hidden>
+        <h3 id="transfer-heading">Another project</h3>
+        <label for="destination-project">Destination project</label>
+        <select id="destination-project"></select>
+        <div class="transfer-buttons">
+          <button id="duplicate-list-button" class="quiet-action-button" type="button">Duplicate there</button>
+          <button id="move-list-button" class="text-button" type="button">Move there</button>
+        </div>
+        <small>If this is a project’s only list, a new empty list will remain behind.</small>
+      </section>
+
+      <div class="organize-footer">
+        <button id="organize-rename-button" class="quiet-button" type="button">Rename</button>
+        <button id="organize-delete-button" class="quiet-button danger-link" type="button">Delete</button>
+      </div>
+    </dialog>
+
+    <dialog id="name-dialog" class="compact-dialog" aria-labelledby="name-dialog-title">
+      <form id="name-form">
+        <p class="eyebrow">Workspace details</p>
+        <h2 id="name-dialog-title">Create project</h2>
+        <label for="name-input">Name</label>
+        <input id="name-input" maxlength="80" autocomplete="off" required />
+        <p id="name-message" class="form-message" role="alert"></p>
+        <div class="dialog-actions">
+          <button id="name-cancel-button" class="quiet-button" type="button">Cancel</button>
+          <button class="text-button" type="submit">Save</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="confirm-dialog" class="compact-dialog" aria-labelledby="confirm-title">
+      <p class="eyebrow">Please confirm</p>
+      <h2 id="confirm-title">Clear this list?</h2>
+      <p id="confirm-message">This action cannot be undone.</p>
+      <div class="dialog-actions">
+        <button id="confirm-cancel-button" class="quiet-button" type="button">Cancel</button>
+        <button id="confirm-button" class="danger-button" type="button">Confirm</button>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="citation-core.js"></script>
+    <script src="workspace-core.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
