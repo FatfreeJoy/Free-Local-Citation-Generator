@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A private browser workspace for building and organizing citation lists." />
+    <meta name="theme-color" content="#fff1e6" />
+    <title>Reference Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to workspace</a>
+
+    <header class="topbar">
+      <p id="breadcrumb" class="breadcrumb">My first project / References</p>
+      <div class="topbar-tools">
+        <label class="style-picker" for="citation-style">
+          <span>Citation style</span>
+          <select id="citation-style">
+            <option value="apa7">APA 7th edition</option>
+            <option value="mla9" disabled>MLA 9 — coming soon</option>
+            <option value="chicago17" disabled>Chicago 17 — coming soon</option>
+            <option value="harvard" disabled>Harvard — coming soon</option>
+          </select>
+        </label>
+        <a class="official-link" href="https://apastyle.apa.org/" target="_blank" rel="noopener noreferrer">Official APA Style guide ↗</a>
+        <p class="privacy-note"><span aria-hidden="true"></span> Local only</p>
+        <button id="about-button" class="icon-button" type="button" aria-label="About Reference Studio">?</button>
+      </div>
+    </header>
+
+    <main id="workspace" class="workspace">
+      <nav class="project-rail" aria-label="Projects and reference lists">
+        <div class="rail-heading">
+          <div>
+            <p class="eyebrow">Workspace</p>
+            <h1>Projects</h1>
+          </div>
+          <button id="new-project-button" class="icon-button filled" type="button" aria-label="Create project">+</button>
+        </div>
+        <div id="project-tree" class="project-tree"></div>
+        <p class="storage-note">Changes are saved on this device as you work.</p>
+      </nav>
+
+      <section class="source-panel" aria-labelledby="source-heading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Add material</p>
+            <h2 id="source-heading">Source entry</h2>
+          </div>
+          <span class="panel-hint">Adds to the active list</span>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Input method">
+          <button id="import-tab" class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="import-panel" tabindex="0">Import</button>
+          <button id="manual-tab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="manual-panel" tabindex="-1">Manual entry</button>
+        </div>
+
+        <div id="import-panel" class="tab-panel" role="tabpanel" aria-labelledby="import-tab">
+          <div id="drop-zone" class="drop-zone">
+            <input id="file-input" class="visually-hidden" type="file" multiple accept=".bib,.ris,application/x-bibtex,application/x-research-info-systems,text/plain" />
+            <div>
+              <p class="drop-title">Drop .bib or .ris files</p>
+              <p class="muted">Select one file or a whole batch</p>
+            </div>
+            <label class="text-button" for="file-input">Choose file</label>
+          </div>
+
+          <div class="label-row">
+            <label class="field-label" for="source-data">Citation data</label>
+            <button id="clear-data-button" class="quiet-button" type="button">Clear data</button>
+          </div>
+          <textarea id="source-data" rows="8" spellcheck="false" placeholder="Paste BibTeX or RIS data here"></textarea>
+          <div class="input-meta">
+            <span id="format-status">Waiting for BibTeX or RIS</span>
+            <button id="sample-button" class="quiet-button" type="button">Use example</button>
+          </div>
+          <div id="import-message" class="form-message" role="alert"></div>
+          <button id="parse-button" class="primary-button" type="button">
+            <span>Add imported references</span><span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div id="manual-panel" class="tab-panel" role="tabpanel" aria-labelledby="manual-tab" hidden>
+          <form id="manual-form">
+            <div class="field full-field">
+              <label for="reference-type">Reference type</label>
+              <select id="reference-type" name="type">
+                <option value="article">Journal article</option>
+                <option value="web">Web page</option>
+                <option value="book">Book</option>
+                <option value="chapter">Book chapter</option>
+              </select>
+            </div>
+
+            <fieldset class="authors-field full-field">
+              <legend>Authors</legend>
+              <div id="author-rows" class="author-rows"></div>
+              <button id="add-author-button" class="add-line-button" type="button">+ Add another author</button>
+              <small>Enter names separately. For an organization author, leave First name blank and use Last name for the full organization.</small>
+            </fieldset>
+
+            <div class="field compact-field">
+              <label for="year">Year</label>
+              <input id="year" name="year" inputmode="numeric" maxlength="4" placeholder="2024" />
+            </div>
+            <div class="field compact-field" data-types="web" hidden>
+              <label for="month">Month</label>
+              <input id="month" name="month" placeholder="March" />
+            </div>
+            <div class="field compact-field" data-types="web" hidden>
+              <label for="day">Day</label>
+              <input id="day" name="day" inputmode="numeric" maxlength="2" placeholder="14" />
+            </div>
+            <div class="field title-field">
+              <label id="title-label" for="title">Article title <span aria-hidden="true">*</span></label>
+              <input id="title" name="title" required placeholder="Title of the work" />
+            </div>
+            <div class="field full-field" data-types="article web chapter">
+              <label id="container-label" for="journal">Journal <span aria-hidden="true">*</span></label>
+              <input id="journal" name="journal" placeholder="Journal of Thoughtful Research" />
+            </div>
+            <div class="field" data-types="article">
+              <label for="volume">Volume</label>
+              <input id="volume" name="volume" placeholder="18" />
+            </div>
+            <div class="field" data-types="article">
+              <label for="issue">Issue</label>
+              <input id="issue" name="issue" placeholder="2" />
+            </div>
+            <div class="field" data-types="article chapter">
+              <label for="pages">Pages</label>
+              <input id="pages" name="pages" placeholder="114–129" />
+            </div>
+            <div class="field" data-types="book chapter" hidden>
+              <label for="edition">Edition</label>
+              <input id="edition" name="edition" placeholder="2" />
+            </div>
+
+            <fieldset id="editors-field" class="authors-field full-field" data-types="chapter" hidden>
+              <legend>Book editors</legend>
+              <div id="editor-rows" class="author-rows"></div>
+              <button id="add-editor-button" class="add-line-button" type="button">+ Add another editor</button>
+            </fieldset>
+
+            <div class="field full-field" data-types="book chapter" hidden>
+              <label for="publisher">Publisher <span aria-hidden="true">*</span></label>
+              <input id="publisher" name="publisher" placeholder="Publisher name" />
+            </div>
+            <div class="field full-field">
+              <label for="doi-url">DOI or URL</label>
+              <input id="doi-url" name="doiUrl" inputmode="url" placeholder="https://doi.org/10.1000/example" />
+            </div>
+            <div id="manual-message" class="form-message full-field" role="alert"></div>
+            <button class="primary-button full-field" type="submit"><span>Add reference</span><span aria-hidden="true">→</span></button>
+          </form>
+        </div>
+      </section>
+
+      <section class="output-panel" aria-labelledby="output-heading">
+        <div class="panel-heading output-heading">
+          <div>
+            <p id="active-project-label" class="eyebrow">My first project</p>
+            <h2 id="output-heading"><span id="active-list-name">References</span></h2>
+          </div>
+          <span id="reference-count" class="count">0 entries</span>
+        </div>
+
+        <div class="output-actions">
+          <p id="active-style-label">APA 7th edition · Alphabetized</p>
+          <div>
+            <button id="rename-list-button" class="quiet-button" type="button">Rename</button>
+            <button id="delete-list-button" class="quiet-button danger-link" type="button">Delete list</button>
+            <button id="clear-list-button" class="quiet-button" type="button" disabled>Clear list</button>
+            <button id="copy-all-button" class="text-button" type="button" disabled>Copy all</button>
+          </div>
+        </div>
+
+        <div id="empty-state" class="empty-state">
+          <span class="empty-glyph" aria-hidden="true">¶</span>
+          <p>This reference list is empty.</p>
+          <small>Import a file or add a source manually. New references accumulate here.</small>
+        </div>
+        <ol id="citation-list" class="citation-list" aria-live="polite"></ol>
+        <p id="copy-status" class="visually-hidden" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <dialog id="welcome-dialog" class="welcome-dialog" aria-labelledby="welcome-title">
+      <button id="welcome-close-button" class="dialog-close" type="button" aria-label="Close introduction">×</button>
+      <p class="eyebrow">A private citation workspace</p>
+      <h2 id="welcome-title">Collect once.<br />Organize clearly.</h2>
+      <p>Reference Studio keeps sources in separate lists for every essay, paper, or publication—and groups those lists into projects.</p>
+      <ul>
+        <li>Import BibTeX and RIS repeatedly</li>
+        <li>Build reusable, locally saved reference lists</li>
+        <li>Format in APA 7 today, with more styles prepared for the future</li>
+      </ul>
+      <div class="welcome-signoff">
+        <p>Created by <strong>FatfreeJoy</strong></p>
+        <button id="enter-button" class="primary-button" type="button"><span>Enter workspace</span><span aria-hidden="true">→</span></button>
+      </div>
+    </dialog>
+
+    <dialog id="name-dialog" class="compact-dialog" aria-labelledby="name-dialog-title">
+      <form id="name-form">
+        <p class="eyebrow">Workspace details</p>
+        <h2 id="name-dialog-title">Create project</h2>
+        <label for="name-input">Name</label>
+        <input id="name-input" maxlength="80" autocomplete="off" required />
+        <p id="name-message" class="form-message" role="alert"></p>
+        <div class="dialog-actions">
+          <button id="name-cancel-button" class="quiet-button" type="button">Cancel</button>
+          <button class="text-button" type="submit">Save</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="confirm-dialog" class="compact-dialog" aria-labelledby="confirm-title">
+      <p class="eyebrow">Please confirm</p>
+      <h2 id="confirm-title">Clear this list?</h2>
+      <p id="confirm-message">This action cannot be undone.</p>
+      <div class="dialog-actions">
+        <button id="confirm-cancel-button" class="quiet-button" type="button">Cancel</button>
+        <button id="confirm-button" class="danger-button" type="button">Confirm</button>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="apa-core.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
