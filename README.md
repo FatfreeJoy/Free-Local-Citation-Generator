@@ -1,4 +1,5 @@
 # Reference Studio
+[![Tests](https://github.com/FatfreeJoy/Reference-Studio/actions/workflows/tests.yml/badge.svg)](https://github.com/FatfreeJoy/Reference-Studio/actions/workflows/tests.yml)
 
 Reference Studio is a free citation workspace that runs entirely in a web browser. It imports, creates, organizes, and copies APA 7 and UNSW Harvard references without an account, installation, build step, or citation-data upload.
 
